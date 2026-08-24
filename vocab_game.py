@@ -105,3 +105,10 @@ st.divider()
 if st.button("🔄 เริ่มเกมใหม่"):
     reset_game()
     st.rerun()
+
+# 5. แสดง Dialog ผลลัพธ์
+if st.session_state.get("is_ended", False):
+    show_result_dialog(ans1, ans2)
+
+st.divider()
+st.write("นายธีรพงษ์ วิลัยศรี เลขที่ 11 ม.4/13")
