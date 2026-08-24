@@ -102,5 +102,7 @@ if st.session_state.get("is_ended", False):
 
 st.divider()
 st.write("นายธีรพงษ์ วิลัยศรี เลขที่ 11 ม.4/13")
+MessageBox  u_ans3 = ans3.strip().lower()
+ u_ans4 = ans4.strip().lower()
 
 
