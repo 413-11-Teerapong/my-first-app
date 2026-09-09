@@ -1,6 +1,7 @@
 import time
 import random
 import streamlit as st
+import streamlit.components.v1 as components
 
 # ============================================================
 # ตั้งค่าหน้าเว็บ
@@ -172,10 +173,34 @@ st.button("🚀 เริ่มเล่นเกม", on_click=reset_game)
 # แถบจับเวลานับขึ้น (ไม่มีการนับถอยหลัง)
 # ------------------------------------------------------------
 if "start" in st.session_state and not st.session_state.get("is_ended", False):
-    elapsed = time.time() - st.session_state.start
-    st.markdown(
-        f"<span class='timer-box'>⏱️ เวลาที่ใช้ไป: {format_time(elapsed)}</span>",
-        unsafe_allow_html=True,
+    # นาฬิกานับขึ้นทำงานฝั่ง JavaScript ล้วนๆ (ไม่สั่ง Streamlit rerun)
+    # จึงไม่รบกวนช่องพิมพ์คำตอบด้านล่างเลย
+    start_ms = int(st.session_state.start * 1000)
+    components.html(
+        f"""
+        <div id="timer-box" style="
+            background-color:#06d6a0;color:#1e3c72;font-weight:bold;
+            font-size:1.1em;padding:8px 16px;border-radius:10px;
+            display:inline-block;font-family:sans-serif;">
+            ⏱️ เวลาที่ใช้ไป: 00:00
+        </div>
+        <script>
+        const startTime = {start_ms};
+        function pad(n) {{ return n.toString().padStart(2, '0'); }}
+        function updateTimer() {{
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const m = Math.floor(elapsed / 60);
+            const s = elapsed % 60;
+            const box = document.getElementById('timer-box');
+            if (box) {{
+                box.innerHTML = '⏱️ เวลาที่ใช้ไป: ' + pad(m) + ':' + pad(s);
+            }}
+        }}
+        setInterval(updateTimer, 1000);
+        updateTimer();
+        </script>
+        """,
+        height=50,
     )
 
     st.divider()
@@ -208,9 +233,6 @@ if "start" in st.session_state and not st.session_state.get("is_ended", False):
         st.session_state.is_ended = True
         st.rerun()
 
-    time.sleep(1)
-    st.rerun()
-
 # ------------------------------------------------------------
 # แสดง Dialog ผลลัพธ์เมื่อจบเกม
 # ------------------------------------------------------------
@@ -218,4 +240,4 @@ if st.session_state.get("is_ended", False):
     show_result_dialog()
 
 st.divider()
-st.write("นักเรียน: นายธีรพงษ์  วิลัยศรี เลขที่   11   ชั้น  4/13 ")
+st.write("นักเรียน: 1.นายพีรวิชญ์ นิลพันธุ์    2.นายแทนคุณ คุ้มมณี   3.นายธีรพงษ์ วิลัยศรี   4.นายราเมศวร์ ลุงตา")
