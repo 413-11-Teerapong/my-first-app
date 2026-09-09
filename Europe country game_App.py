@@ -17,8 +17,10 @@ st.markdown(
         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
     }
     div[data-testid="stTextInput"] input {
-        background-color: #ffffff;
+        background-color: #ffffff !important;
+        color: #1e3c72 !important;
         border-radius: 8px;
+        caret-color: #1e3c72;
     }
     .region-badge {
         display:inline-block;
